@@ -1,0 +1,32 @@
+name: Package on Release
+
+on:
+  release:
+    types: [published]  # 当发布一个新版本时触发
+
+jobs:
+  package-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}  # 精确检出当前Release的Tag
+
+      - name: Create ZIP Archive
+        run: |
+          cd ${{ github.workspace }}
+          zip -r package.zip * -x ".git/*" ".github/*" ".gitignore" "LICENSE"
+
+      - name: Upload ZIP as Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/package.zip
+          asset_name: package.zip
+          asset_content_type: application/zip

@@ -1,30 +1,27 @@
 {
-  "name": "widget-sample",
-  "author": "Vanessa",
-  "url": "https://github.com/siyuan-note/widget-sample",
-  "version": "0.0.3",
+  "name": "siyuan-tikz",
+  "author": "Yuxin Zhao",
+  "url": "https://github.com/YuxinZhaozyx/siyuan-tikz",
+  "version": "0.1.0",
   "minAppVersion": "2.8.8",
   "displayName": {
-    "default": "Widget Sample",
-    "zh_CN": "挂件示例"
+    "default": "TikZ"
   },
   "description": {
-    "default": "This is a widget sample",
-    "zh_CN": "这是一个挂件示例"
+    "default": "Elegantly Writing and Displaying Graph using TikZ",
+    "zh_CN": "用LaTeX TikZ优雅地书写和展示图形"
   },
   "readme": {
-    "default": "README.md",
-    "zh_CN": "README_zh_CN.md"
+    "default": "README.md"
   },
   "funding": {
     "openCollective": "",
     "patreon": "",
-    "github": "",
+    "github": "YuxinZhaozyx",
     "custom": [
-      "https://ld246.com/sponsor"
     ]
   },
   "keywords": [
-    "sample", "示例"
+    "LaTeX", "TikZ", "Graph"
   ]
 }

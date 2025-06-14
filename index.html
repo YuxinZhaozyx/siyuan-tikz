@@ -2,58 +2,244 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Hello, Bootstrap Table!</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no">
+    <title>latex-tikz</title>
 
-    <link rel="stylesheet" href="static/bootstrap.min.css">
-    <link rel="stylesheet" href="static/bootstrap-table.min.css">
+    <link rel="stylesheet" href="libs/katex/katex.min.css">
+    <link rel="stylesheet" type="text/css" href="libs/tikzjax/fonts.css">
+    
+    <script src="libs/tikzjax/tikzjax.js"></script>
+
+    <style>
+        body {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        #edit-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        #display-panel {
+            display: none;
+            padding-top: 4px;
+        }
+        #editor-container {
+            position: absolute;
+            top: 0;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            border: 1px solid gray;
+        }
+        #tikz-container {
+            width: 100%;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 可选：垂直居中 */
+        }
+        #status-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            border: 1px solid gray;
+            display: flex;
+            justify-content: space-between; /* 左右子元素贴边 */
+            align-items: center;             /* 垂直居中 */
+            font-size: 12px;
+        }
+        #status-bar .left-controls {
+            display: flex;
+            gap: 8px; /* 下拉框之间的间距 */
+        }
+        #status-bar .right-controls {
+            display: flex;
+            gap: 8px; /* 下拉框之间的间距 */
+        }
+        
+        #status-bar button {
+            background-color: transparent;
+            border: none;
+            display: inline-flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+        }
+        #status-bar button .icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.2s ease; /* 平滑过渡 */
+        }
+        @keyframes clickScale {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(0.7); }
+            100% { transform: scale(1); }
+        }
+        #status-bar button:active .icon {
+            animation: clickScale 0.2s ease;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* 半透明背景 */
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.5);
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.3s ease, scaleIn 0.3s ease;
+            text-align: left;
+        }
+
+        /* 标题样式 */
+        .modal-content h2 {
+            color: #d9534f; /* 红色标题 */
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        /* 错误信息样式 */
+        #modal-content p {
+            font-size: 16px;
+            line-height: 1;
+            color: #555;
+        }
+
+        /* 关闭按钮样式 */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        #edit {
+            position: fixed;
+            top: 20px;
+            right: -30px; /* 初始隐藏在屏幕外 */
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+            width: 30px;
+            height: 30px;
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+            background-color: white;
+            border: 2px solid gray;
+            display: inline-flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+        }
+        #edit.show {
+            right: -2px; /* 弹出到可视区域 */
+        }
+        #edit .icon {
+            width: 25px;
+            height: 25px;
+            transition: transform 0.2s ease; /* 平滑过渡 */
+        }
+        #edit:active .icon {
+            animation: clickScale 0.2s ease;
+        }
+    </style>
 </head>
 <body>
-<table id="table">
-</table>
+<div id="edit-panel">
+    <div id="editor-container"></div>
+    <div id="status-bar">
+        <div class="left-controls">
+            <button id="display">
+                <svg t="1746983933640" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="25639" width="20" height="20"><path d="M334.645 405.333h64.928V172.961l485.248 324.638-293.883 194.782v78.596L960 524.937v-54.676L382.487 84.113l-47.841 27.338-0.001 293.882z m-10.251 51.259c27.338 2.278 53.537 9.682 78.596 22.212 25.06 12.53 47.841 27.907 68.345 46.133v3.417c45.563 47.841 68.345 105.934 68.345 174.279 0 52.398-18.225 102.517-54.676 150.358-38.729 43.285-86 70.623-141.815 82.014-55.815 11.391-108.213 2.848-157.193-25.629-48.98-28.477-83.722-67.775-104.226-117.895-9.113-27.338-14.808-54.676-17.086-82.014-2.278-27.338 1.139-54.676 10.252-82.014 18.225-56.954 50.12-100.239 95.683-129.855 45.562-29.615 96.821-43.284 153.775-41.006zM201.373 545.44c-34.172 25.06-56.954 59.232-68.345 102.517-13.669 43.285-11.391 83.722 6.834 121.312s45.563 67.206 82.014 88.848c36.451 21.643 75.179 27.907 116.186 18.795 41.007-9.113 75.179-31.325 102.517-66.636s39.868-72.332 37.59-111.06c0-25.06-4.556-48.98-13.669-71.762-9.113-22.782-21.643-43.285-37.59-61.51-31.894-29.616-68.345-46.702-109.352-51.259-45.562-2.278-84.291 7.974-116.185 30.755z m174.279 61.51L269.718 712.885l-41.007-41.007-44.424 44.424 61.51 64.928h47.841l126.438-126.438-44.424-47.842z" p-id="25640"></path></svg>
+            </button>
+        </div>
+        <div class="right-controls">
+        </div>
+    </div>
+</div>
+<div id="display-panel">
+    <div id="tikz-container"></div>
+    <button id="edit">
+        <svg t="1747014677250" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="34316" width="32" height="32"><path d="M934.4 981.312H89.6a46.08 46.08 0 0 1-46.912-46.848V156.672a46.08 46.08 0 0 1 46.912-46.848h367.616a46.08 46.08 0 0 1 46.976 46.848 46.08 46.08 0 0 1-46.976 46.848h-320.64V887.68h750.912V515.904a46.08 46.08 0 0 1 46.912-46.848 46.08 46.08 0 0 1 46.912 46.848v418.56a47.04 47.04 0 0 1-46.912 46.848z" fill="#172B4D" p-id="34317"></path><path d="M330.496 739.2a42.624 42.624 0 0 1-32.832-14.016 44.928 44.928 0 0 1-14.08-32.768V504.96c0-12.48 4.672-24.96 14.08-32.768L713.792 56.704a42.624 42.624 0 0 1 32.896-14.08c12.48 0 24.96 4.736 32.832 14.08l187.712 187.456c18.816 18.752 18.816 48.384 0 65.6L551.104 725.12a45.056 45.056 0 0 1-32.832 14.08H330.496z m46.976-215.488v120.32H497.92l369.216-367.104-120.448-121.792-369.28 368.576z" fill="#172B4D" p-id="34318"></path></svg>
+    </button>
+</div>
+<div id="error-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="document.getElementById('error-modal').style.display = 'none'">&times;</span>
+        <h2>图形渲染失败，请检查输入</h2>
+        <p>错误信息:</p>
+        <p id="error-message">这是一个错误信息！</p>
+    </div>
+</div>
 
-<script src="static/jquery.min.js"></script>
-<script src="static/popper.min.js"></script>
-<script src="static/bootstrap.min.js"></script>
-<script src="static/bootstrap-table.min.js"></script>
+<script src="libs/katex/katex.min.js"></script>
+<script src="libs/monaco/min/vs/loader.js"></script>
+<script type="module" src="src/main.js"></script>
 
 <script>
-    $.ajax({
-        method: "POST",
-        url: "http://127.0.0.1:6806/api/query/sql",
-        data: JSON.stringify({
-            "stmt": "SELECT * FROM blocks WHERE content LIKE'%content%' LIMIT 7"
-        })
-    }).done(result => {
-        console.log(result);
+    const btn = document.getElementById('edit');
+    const displayPanel = document.getElementById('display-panel');
 
-        $('#table').bootstrapTable({
-            sortable: true,
-            columns: [{
-                field: 'id',
-                title: 'ID',
-                width: "100",
-            }, {
-                field: 'content',
-                title: 'Content',
-                width: "100",
-            }, {
-                field: 'type',
-                title: 'Type',
-                width: "20",
-            }, {
-                field: 'created',
-                title: 'Created',
-                width: "100",
-            }, {
-                field: 'updated',
-                title: 'Updated',
-                width: "100",
-            }
-            ],
-            data: result.data,
-        });
-    })
+    // 判断是否聚焦在窗口
+    function handleVisibilityChange() {
+      if (document.hasFocus() && displayPanel.style.display !== 'none') {
+        btn.classList.add('show');
+      } else {
+        btn.classList.remove('show');
+      }
+    }
+
+    // 初始化状态
+    window.addEventListener('load', handleVisibilityChange);
+    window.addEventListener('focus', handleVisibilityChange);
+    window.addEventListener('blur', handleVisibilityChange);
+
+    // 移动端没有 focus/blur，所以需要模拟判断
+    let isTouched = false;
+
+    window.addEventListener('touchstart', () => {
+        if (displayPanel.style.display !== 'none') {
+            isTouched = true;
+            btn.classList.add('show');
+        }    
+    });
+
+    window.addEventListener('touchend', () => {
+      isTouched = false;
+      setTimeout(() => {
+        if (!isTouched || displayPanel.style.display == 'none') {
+          btn.classList.remove('show');
+        }
+      }, 3000); // 触摸后保持显示3秒
+    });
 </script>
 </body>
 </html>
