@@ -343,6 +343,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.1.1
+    + 修复暗色模式下的显示
 + v0.1.0
     + 初始版本
     + 支持无网络离线使用、VSCode风格的编辑器、语法高亮、代码自动补全
