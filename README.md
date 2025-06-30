@@ -343,6 +343,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.1.2
+    + 修复tikz-cd部分节点不显示的问题 [#1](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/1)
 + v0.1.1
     + 修复暗色模式下的显示
 + v0.1.0
