@@ -346,6 +346,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.2.1
+    + 修复缩放系数在部分旧内核浏览器上无效的问题
 + v0.2.0
     + 支持设置缩放系数 [#2](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/2)
     + 根据渲染完成的图像自动调整挂件窗口大小 [#2](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/2)

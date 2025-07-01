@@ -87,7 +87,7 @@ document.addEventListener('tikzjax-render-finished', function (event) {
         const wrapper = document.createElement('div');
         wrapper.style.width = scaled_width + "px";
         wrapper.style.height = scaled_height + "px";
-        picture.style.scale = scale_factor;
+        picture.style.transform = `scale(${scale_factor})`;
         picture.style.transformOrigin = "top left";
         wrapper.replaceChildren(picture);
 
