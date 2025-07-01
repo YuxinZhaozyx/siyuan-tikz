@@ -326,6 +326,9 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 - [x] VSCode风格的编辑器
 - [x] 语法高亮
 - [x] 代码自动补全
+- [x] 支持单挂件窗口渲染多张图
+- [x] 支持设置图像缩放系数
+- [x] 根据渲染图像自动调整挂件窗口大小
 - [ ] 中文支持
 
 > 如有更多需求/建议欢迎在GitHub仓库中提issue
@@ -343,6 +346,9 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.2.0
+    + 支持设置缩放系数 [#2](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/2)
+    + 根据渲染完成的图像自动调整挂件窗口大小 [#2](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/2)
 + v0.1.3
     + 支持一个document中显示多张图
 + v0.1.2

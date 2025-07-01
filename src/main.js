@@ -6,11 +6,15 @@ async function load() {
     if (attrs['custom-latex-code']) {
         editor.setValue(attrs['custom-latex-code']);
     }
+    if (attrs['custom-scale-factor']) {
+        document.getElementById('scale-factor').value = attrs['custom-scale-factor'];
+    }
 }
 
 async function save() {
     const attrs = {}
     attrs['custom-latex-code'] = await editor.getValue();
+    attrs['custom-scale-factor'] = document.getElementById('scale-factor').value;
     
     setBlockAttrsAPI(attrs);
 }
@@ -18,6 +22,9 @@ async function save() {
 function showPanel(panel) {
     for (const panel_name of ['edit-panel', 'display-panel']) {
         document.getElementById(panel_name).style.display = (panel_name == panel ? 'flex' : 'none');
+    }
+    if (panel == 'edit-panel') {
+        changeFrameStyle(edit_panel_frame_style);
     }
 }
 
@@ -41,6 +48,13 @@ async function display(show_error_message = true) {
     showPanel('display-panel');
 }
 
+let edit_panel_frame_style = window.frameElement.style;
+function changeFrameStyle(style) {
+    const old_style = window.frameElement.style;
+    window.frameElement.style = style;
+    return old_style;
+}
+
 window.onload = async function () {
     await load();
     await display(false);
@@ -61,5 +75,28 @@ document.addEventListener('tikzjax-render-finished', function (event) {
         showPanel('edit-panel');
         document.getElementById("error-message").innerText = "输入的TikZ代码错误";
         document.getElementById("error-modal").style.display = "block";
+    }
+    if (event.detail.status == "success") {
+        // 缩放图片
+        const picture = document.getElementById('tikz-container').firstChild;
+        let scale_factor = document.getElementById('scale-factor').value;
+        scale_factor = scale_factor == "" ? 1 : parseFloat(scale_factor);
+        const scaled_width = picture.scrollWidth * scale_factor;
+        const scaled_height = picture.scrollHeight * scale_factor;
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.width = scaled_width + "px";
+        wrapper.style.height = scaled_height + "px";
+        picture.style.scale = scale_factor;
+        picture.style.transformOrigin = "top left";
+        wrapper.replaceChildren(picture);
+
+        document.getElementById('tikz-container').replaceChildren(wrapper);
+
+        // 调整挂件窗口大小
+        edit_panel_frame_style = changeFrameStyle(
+            `width: ${Math.max(scaled_width + 20, 50)}px;` +
+            `height: ${Math.max(scaled_height + 20, 50)}px;`
+        );
     }
 })

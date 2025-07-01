@@ -33,10 +33,13 @@
             border: 1px solid gray;
         }
         #tikz-container {
-            width: 100%;
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center;     /* 可选：垂直居中 */
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            left: 2px;
+            right: 2px;
+            display: grid;
+            place-items: center;
         }
         #status-bar {
             position: absolute;
@@ -78,6 +81,14 @@
         }
         #status-bar button:active .icon {
             animation: clickScale 0.2s ease;
+        }
+
+        #status-bar input {
+            border: none;
+            background-color: transparent;
+        }
+        #scale-factor {
+            width: 40px;
         }
 
         /* 模态框 */
@@ -183,6 +194,7 @@
             </button>
         </div>
         <div class="right-controls">
+            <input id="scale-factor" type="number" step="0.01" min="0" placeholder="缩放">
         </div>
     </div>
 </div>
