@@ -73,7 +73,7 @@ document.addEventListener('tikzjax-render-finished', function (event) {
     if (event.detail.status == "error") {
         console.log(event.detail.message)
         showPanel('edit-panel');
-        document.getElementById("error-message").innerText = "输入的TikZ代码错误";
+        document.getElementById("error-message").innerText = event.detail.message;
         document.getElementById("error-modal").style.display = "block";
     }
     if (event.detail.status == "success") {
