@@ -326,6 +326,7 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 - [x] VSCode风格的编辑器
 - [x] 语法高亮
 - [x] 代码自动补全
+- [x] 错误提示
 - [x] 支持单挂件窗口渲染多张图
 - [x] 支持设置图像缩放系数
 - [x] 根据渲染图像自动调整挂件窗口大小
@@ -346,6 +347,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.3.0
+    + 支持显示详细错误信息
 + v0.2.1
     + 修复缩放系数在部分旧内核浏览器上无效的问题
 + v0.2.0
