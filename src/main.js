@@ -96,7 +96,8 @@ document.addEventListener('tikzjax-render-finished', function (event) {
         // 调整挂件窗口大小
         edit_panel_frame_style = changeFrameStyle(
             `width: ${Math.max(scaled_width + 20, 50)}px;` +
-            `height: ${Math.max(scaled_height + 20, 50)}px;`
+            `height: ${Math.max(scaled_height + 20, 50)}px;` +
+            `border: 0;`
         );
     }
 })
