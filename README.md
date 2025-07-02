@@ -347,8 +347,11 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.3.1
+    + 修复连续输入代码错误但显示的错误信息没有变化的问题
+    + 修复无图片的纯文字输入会导致一直处于编译状态的问题
 + v0.3.0
-    + 支持显示详细错误信息
+    + 支持显示详细错误信息 [#3](https://github.com/YuxinZhaozyx/siyuan-tikz/issues/3)
 + v0.2.1
     + 修复缩放系数在部分旧内核浏览器上无效的问题
 + v0.2.0
