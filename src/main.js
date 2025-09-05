@@ -1,5 +1,29 @@
 import * as editor from './editor.js'
-import { getBlockAttrsAPI, setBlockAttrsAPI } from './api.js';
+import { getBlockAttrsAPI, setBlockAttrsAPI, getPageElement } from './api.js';
+
+function lock() {
+    return new Promise((resolve) => {
+        const element = getPageElement();
+        if (!element.dataset.rending_tikz) {
+            element.dataset.rending_tikz = 'true';
+            resolve();
+            return;
+        }
+
+        const interval_id = setInterval(() => {
+            if (!element.dataset.rending_tikz) {
+                clearInterval(interval_id);
+                element.dataset.rending_tikz = 'true';
+                resolve();
+            }
+        }, 100);
+    });
+}
+
+function unlock() {
+    const element = getPageElement();
+    element.dataset.rending_tikz = '';
+}
 
 async function load() {
     const attrs = await getBlockAttrsAPI();
@@ -57,12 +81,16 @@ function changeFrameStyle(style) {
 
 window.onload = async function () {
     await load();
+    await lock();
     await display(false);
+    unlock();
 }
 
 document.getElementById('display').onclick = async function () {
     save();
+    await lock();
     display();
+    unlock();
 }
 
 document.getElementById('edit').onclick = async function () {
