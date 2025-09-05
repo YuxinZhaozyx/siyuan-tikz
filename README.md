@@ -347,6 +347,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.3.4
+    + 修复tikzjax后台持续占用内存的问题
 + v0.3.3
     + 修复大量TikZ图形同时渲染导致内存占用过高而白屏的问题
 + v0.3.2

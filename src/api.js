@@ -43,7 +43,8 @@ export async function setBlockAttrsAPI(attrs) {
 
 export function getPageElement() {
     let element = window.frameElement;
-    while (element.classList.contains("protype")) {
+    // while (element.classList.contains("protype")) {
+    while (element.nodeName != "BODY") {
         element = element.parentElement;
     }
     return element;

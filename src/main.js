@@ -16,7 +16,7 @@ function lock() {
                 element.dataset.rending_tikz = 'true';
                 resolve();
             }
-        }, 100);
+        }, 10);
     });
 }
 
@@ -53,6 +53,32 @@ function showPanel(panel) {
 }
 
 async function display(show_error_message = true) {
+    const width = 75;
+    const height = 75;
+    const loading_svg = document
+        .createRange()
+        .createContextualFragment(
+            '<svg version="1.1" ' +
+                'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ' +
+                `width="${width}pt" height="${height}pt" viewBox="0 0 ${width} ${height}">` +
+                `<rect width="${width}" height="${height}" rx="5pt" ry="5pt" ` +
+                'fill="#000" fill-opacity="0.2"/>' +
+                `<circle cx="${width / 2}" cy="${height / 2}" r="15" stroke="#f3f3f3" ` +
+                'fill="none" stroke-width="3"/>' +
+                `<circle cx="${width / 2}" cy="${height / 2}" r="15" stroke="#3498db80" ` +
+                'fill="none" stroke-width="3" stroke-linecap="round">' +
+                '<animate attributeName="stroke-dasharray" begin="0s" dur="2s" ' +
+                'values="56.5 37.7;1 93.2;56.5 37.7" keyTimes="0;0.5;1" repeatCount="indefinite">' +
+                '</animate>' +
+                '<animate attributeName="stroke-dashoffset" begin="0s" dur="2s" ' +
+                'from="0" to="188.5" repeatCount="indefinite"></animate></circle>' +
+                '</svg>'
+        ).firstChild;
+    document.getElementById('tikz-container').replaceChildren(loading_svg);
+    showPanel('display-panel');
+
+    await lock();
+
     const tikz_element = document.createElement('script');
     tikz_element.type = 'text/tikz';
     tikz_element.textContent = await editor.getValue();
@@ -67,6 +93,8 @@ async function display(show_error_message = true) {
             document.getElementById("error-message").innerText = error.message;
             document.getElementById("error-modal").style.display = "block";
         }
+        unlock();
+        showPanel('edit-panel');
         return;
     }
     showPanel('display-panel');
@@ -81,16 +109,12 @@ function changeFrameStyle(style) {
 
 window.onload = async function () {
     await load();
-    await lock();
-    await display(false);
-    unlock();
+    display(false);
 }
 
 document.getElementById('display').onclick = async function () {
     save();
-    await lock();
     display();
-    unlock();
 }
 
 document.getElementById('edit').onclick = async function () {
@@ -128,4 +152,5 @@ document.addEventListener('tikzjax-render-finished', function (event) {
             `border: 0;`
         );
     }
+    unlock();
 })
