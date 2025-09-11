@@ -319,6 +319,104 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ![image.png](https://b3logfile.com/file/2025/06/image-O9ftKzF.png)
 
+<details>
+<summary> TikZ 代码 </summary>
+
+```
+\usepackage{tikz}
+\usetikzlibrary{fpu}
+\usetikzlibrary{math}
+\begin{document}
+\begin{tikzpicture} 
+    \tikzmath{ 
+        function paint_nodes(\radius,\gapy,\posx,\num){ 
+            \gapy = \gapy+\radius*2;  
+            \starty = \gapy*(\num-1)/2; 
+            for \i in {0,...,\num-1}{
+                \drawy = \starty - \i*\gapy; 
+                {
+                    \filldraw[line width = 0.5pt,fill = white] (\posx,\drawy) circle (\radius);
+                };
+            };   
+        };
+        function paint_lines(\radius,\gapy,\posx,\num,\nextposx,\nextnum){ 
+            \gapy = \gapy+\radius*2;  
+            \starty = \gapy*(\num-1)/2;
+            \startyy = \gapy*(\nextnum-1)/2; 
+            for \i in {0,...,\num-1}{
+                \drawy = \starty - \i*\gapy; 
+                for \j in {0,...,\nextnum-1}{  
+                    \drawyy = \startyy - \j*\gapy;   
+                    {
+                        \draw (\posx,\drawy) -- (\nextposx,\drawyy);
+                    };
+                }; 
+            };
+        };
+        function paint_x_lines(\radius,\gapy,\posx,\num,\ifright,\len){
+            \gapy = \gapy+\radius*2;  
+            \starty = \gapy*(\num-1)/2; 
+            for \i in {0,...,\num-1}{
+                \drawy = \starty - \i*\gapy; 
+                if \ifright == 1 then{
+                    {
+                        \draw[-latex] (\posx,\drawy) -- (\posx+\len,\drawy);
+                    }; 
+                }else{ 
+                    {
+                        \draw[-latex] (\posx,\drawy)--(\posx-\len,\drawy);
+                    }; 
+                }; 
+            }; 
+        };
+        function paint_net(\x0,\x1,\x2,\x3){  
+            \gapx = 2;
+            \radius = 0.3;
+            \gapy = 0.2; 
+            paint_lines(\radius,\gapy,0*\gapx,\x0,1*\gapx,\x1);
+            paint_lines(\radius,\gapy,1*\gapx,\x1,2*\gapx,\x2);
+            paint_lines(\radius,\gapy,2*\gapx,\x2,3*\gapx,\x3); 
+            paint_x_lines(\radius,\gapy,3*\gapx,\x3,1,1.8);
+            paint_x_lines(\radius,\gapy,0*\gapx-1,\x0,1,1);
+            paint_nodes(\radius,\gapy,1*\gapx,\x1); 
+            paint_nodes(\radius,\gapy,2*\gapx,\x2);
+            paint_nodes(\radius,\gapy,3*\gapx,\x3);  
+        };  
+        paint_net(7,9,10,5); 
+    } 
+    \node[scale = 0.9] at (0,-4.2) {Feature};
+    \node[scale = 0.9] at (2,-4.2) {Input layer};
+    \node[scale = 0.9] at (4,-4.2) {Hide layer};
+    \node[scale = 0.9] at (6,-4.2) {Output layer}; 
+
+\end{tikzpicture}
+\end{document}
+```
+
+</details>
+
+![image.png](https://b3logfile.com/file/2025/09/image-Q6z7Wb4.png)
+
+<details>
+<summary> TikZ 代码 </summary>
+
+```
+\tikz \node {
+  \begin{tabular}{ccc}
+  \hline
+  Column 1 & Column 2 & Column 3 \\
+  \hline
+  Data 1 & Data 2 & Data 3 \\ 
+  Data 4 & Data 5 & Data 6 \\
+  Data 7 & Data 8 & Data 9 \\
+  \hline
+  \end{tabular}
+};
+```
+
+</details>
+
+![image.png](https://b3logfile.com/file/2025/09/image-lfmkZEY.png)
 
 ## 功能特征
 
@@ -347,6 +445,10 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.4.0
+    + 优化启动思源笔记时大量图形的渲染，秒加载
++ v0.3.6
+    + 增加神经网络与表格的演示案例
 + v0.3.5
     + 修复预览模式下无法获取数据的问题（思源笔记版本需>=3.3.2）
 + v0.3.4
