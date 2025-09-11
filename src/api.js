@@ -11,9 +11,20 @@ async function postFetch(url, data) {
 }
 
 function getCurrentBlockId() {
-    try {
-        return window.frameElement.parentElement.parentElement.getAttribute("data-node-id");
-    } catch (err) {
+    let block_id = null;
+    if (!block_id) {
+        try {
+            block_id = window.frameElement.parentElement.parentElement.dataset.nodeId;
+        } catch (err) {}
+    }
+    if (!block_id) {
+        try {
+            block_id = window.frameElement.parentElement.id;
+        } catch (err) {}
+    }
+    if (block_id) {
+        return block_id;
+    } else {
         console.warn("getCurrentBlockId失效");
         return null;
     }

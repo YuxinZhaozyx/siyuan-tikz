@@ -347,6 +347,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.3.5
+    + 修复预览模式下无法获取数据的问题（思源笔记版本需>=3.3.2）
 + v0.3.4
     + 修复tikzjax后台持续占用内存的问题
 + v0.3.3
