@@ -2,7 +2,7 @@
   "name": "siyuan-tikz",
   "author": "Yuxin Zhao",
   "url": "https://github.com/YuxinZhaozyx/siyuan-tikz",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "minAppVersion": "2.8.8",
   "displayName": {
     "default": "TikZ"

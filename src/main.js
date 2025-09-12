@@ -49,12 +49,6 @@ async function load() {
     if (attrs['custom-scale-factor']) {
         document.getElementById('scale-factor').value = attrs['custom-scale-factor'];
     }
-    if (attrs['custom-img-html']) {
-        showPanel('display-panel');
-        document.getElementById('tikz-container').innerHTML = base64ToUnicode(attrs['custom-img-html']);
-        if (attrs['custom-frame-style']) changeFrameStyle(attrs['custom-frame-style']);
-    }
-
 }
 
 async function save() {
@@ -71,12 +65,28 @@ async function saveImageAndFrameStyle(img_html, frame_style) {
     setBlockAttrsAPI(attrs);
 }
 
-function showPanel(panel) {
+async function loadImageAndFrameStyle() {
+    const attrs = await getBlockAttrsAPI();
+    if (attrs['custom-img-html']) {
+        showPanel('display-panel');
+        document.getElementById('tikz-container').innerHTML = base64ToUnicode(attrs['custom-img-html']);
+        if (attrs['custom-frame-style']) changeFrameStyle(attrs['custom-frame-style']);
+        return true;
+    }
+    return false;
+}
+
+let first_load_edit_panel = true;
+async function showPanel(panel) {
     for (const panel_name of ['edit-panel', 'display-panel']) {
         document.getElementById(panel_name).style.display = (panel_name == panel ? 'flex' : 'none');
     }
     if (panel == 'edit-panel') {
         changeFrameStyle(edit_panel_frame_style);
+    }
+    if (panel == 'edit-panel' && first_load_edit_panel) {
+        first_load_edit_panel = false;
+        await load();
     }
 }
 
@@ -136,8 +146,9 @@ function changeFrameStyle(style) {
 }
 
 window.onload = async function () {
-    await load();
-    if (!document.getElementById('tikz-container').firstChild) {
+    const preview_loaded = await loadImageAndFrameStyle();
+    if (!preview_loaded) {
+        await showPanel('edit-panel');
         display(false);
     }
 }

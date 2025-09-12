@@ -445,6 +445,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.4.1
+    + 优化挂件的内存占用
 + v0.4.0
     + 优化启动思源笔记时大量图形的渲染，秒加载
 + v0.3.6
