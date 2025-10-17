@@ -428,7 +428,7 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 - [x] 支持单挂件窗口渲染多张图
 - [x] 支持设置图像缩放系数
 - [x] 根据渲染图像自动调整挂件窗口大小
-- [ ] 中文支持
+- [x] 中文支持
 
 > 如有更多需求/建议欢迎在GitHub仓库中提issue
 
@@ -445,6 +445,9 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.5.0
+    + 支持中文
+    + 增加K线图示例
 + v0.4.1
     + 优化挂件的内存占用
 + v0.4.0
