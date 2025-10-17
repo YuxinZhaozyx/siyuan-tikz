@@ -418,6 +418,97 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ![image.png](https://b3logfile.com/file/2025/09/image-lfmkZEY.png)
 
+<details>
+<summary> TikZ 代码 </summary>
+
+```
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}
+    % 定义绘制K线的命令: \candle{横坐标}{开盘价}{收盘价}{最高价}{最低价}
+    \newcommand{\candle}[5]{
+        \edef\xpos{#1}%
+        \edef\open{#2}%
+        \edef\close{#3}%
+        \edef\high{#4}%
+        \edef\low{#5}%
+        \draw (\xpos,\low) -- (\xpos,\high);
+        \ifdim#3 pt > #2 pt
+            \draw[fill=red] (\xpos-0.2,\open) rectangle (\xpos+0.2,\close);
+        \else
+            \draw[fill=green] (\xpos-0.2,\open) rectangle (\xpos+0.2,\close);
+        \fi
+    }
+
+    % 定义箭头命令：\arrow{方向}{横坐标}{价格}{文字}{颜色}
+    \newcommand{\arrow}[5]{%
+        \def\dir{#1}%
+        \def\x{#2}%
+        \def\y{#3}%
+        \def\labeltext{#4}%
+        \def\arrowcolor{#5}%
+        %
+        \ifnum\pdfstrcmp{\dir}{down}=0
+            \draw[<-, \arrowcolor, very thick] (\x,\y) -- (\x,\y+0.7) 
+                node[above, text=\arrowcolor] {\labeltext};
+        \else\ifnum\pdfstrcmp{\dir}{up}=0
+            \draw[<-, \arrowcolor, very thick] (\x,\y) -- (\x,\y-0.7) 
+                node[below, text=\arrowcolor] {\labeltext};
+        \else\ifnum\pdfstrcmp{\dir}{right}=0
+            \draw[<-, \arrowcolor, very thick] (\x,\y) -- (\x-0.7,\y) 
+                node[left, text=\arrowcolor] {\labeltext};
+        \else\ifnum\pdfstrcmp{\dir}{left}=0
+            \draw[<-, \arrowcolor, very thick] (\x,\y) -- (\x+0.7,\y) 
+                node[right, text=\arrowcolor] {\labeltext};
+        \fi\fi\fi\fi
+    }
+
+    % 定义曲线命令：\curve{颜色}{宽度}{点列表}
+    \newcommand{\curve}[3]{
+        \draw[#1, line width=#2, smooth] plot coordinates {#3};
+    }
+
+    % 定义半透明矩形命令：\orect{颜色}{不透明度}{左上角坐标}{右下角坐标}
+    \newcommand{\orect}[4]{
+        \fill[#1, fill opacity=#2] #3 rectangle #4;
+    }
+
+    % K线示例：\candle{横坐标}{开盘价}{收盘价}{最高价}{最低价}
+    \candle{1}{5}{6}{7}{4}
+    \candle{2}{6}{5}{7}{4.5}
+    \candle{3}{5}{7}{8}{4.8}
+    \candle{4}{7}{4}{9}{3}
+    \candle{5}{4}{8}{9}{3.5}
+    \candle{6}{8}{3}{9}{2.5}
+    \candle{7}{3}{6}{7}{2}
+    \candle{8}{6}{5}{7}{4}
+    \candle{9}{5}{6}{7}{4.5}
+    \candle{10}{6}{7}{8}{5.5}
+
+    % 箭头示例：\curve{颜色}{宽度}{点列表}
+    \arrow{up}{5}{3.5}{转折}{green!70!black} % 70%绿色+30%黑色
+    \arrow{left}{7}{2}{低点}{blue}
+    \arrow{right}{0.7}{5}{开盘}{red}
+    \arrow{down}{5}{9}{高点}{orange}
+
+    % 虚线示例：\curve{颜色,dashed}{宽度}{点列表}
+    \curve{blue, dashed}{1.5pt}{(1,5.2) (2,5.5) (3,6) (4,6.3) (5,6)}
+    % 实线示例：\curve{颜色}{宽度}{点列表}
+    \curve{blue}{1.5pt}{(5,6) (6,5.4) (7,4) (8,5.2) (9,5.6) (10,7.8)}
+
+    % 文本
+    \node[above, blue] at (9.5,7.5) {MA5};
+
+    % 矩形：\orect{颜色}{不透明度}{左上角坐标}{右下角坐标}
+    \orect{blue}{0.1}{(7,4)}{(10,7)};
+\end{tikzpicture}
+\end{document}
+```
+
+</details>
+
+![image.png](https://b3logfile.com/file/2025/10/image-8xZky4z.png)
+
 ## 功能特征
 
 - [x] 无网络离线使用
