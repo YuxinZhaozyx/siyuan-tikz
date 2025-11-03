@@ -1,5 +1,7 @@
 # siyuan-TikZ
 
+> 现已升级为TikZ插件(siyuan-embed-tikz)，提供更强的跨平台能力，现有挂件用户无需担心迁移问题，安装TikZ插件后可将原TikZ挂件块转换为TikZ插件新格式
+
 一款让你在思源笔记中用LaTeX TikZ语法优雅地绘制图形的挂件。
 
 ## 使用效果
@@ -536,6 +538,8 @@ C' \arrow[rr,"k'" near end] \arrow[dr,swap,"c"] && D' \arrow[dr,swap,"d"] \\
 
 ## 更新日志
 
++ v0.5.1
+    + 发布插件版本
 + v0.5.0
     + 支持中文
     + 增加K线图示例

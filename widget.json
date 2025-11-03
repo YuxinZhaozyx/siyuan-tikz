@@ -2,14 +2,14 @@
   "name": "siyuan-tikz",
   "author": "Yuxin Zhao",
   "url": "https://github.com/YuxinZhaozyx/siyuan-tikz",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "minAppVersion": "2.8.8",
   "displayName": {
     "default": "TikZ"
   },
   "description": {
-    "default": "Elegantly Writing and Displaying Graph using TikZ",
-    "zh_CN": "用LaTeX TikZ优雅地书写和展示图形"
+    "default": "Upgrade to TikZ Plugin(siyuan-embed-tikz)",
+    "zh_CN": "现已升级为TikZ插件(siyuan-embed-tikz)，请迁移"
   },
   "readme": {
     "default": "README.md"
